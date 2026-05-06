@@ -766,6 +766,7 @@ func (a *AccountsApi) createSubAccountModels(uid int64, accountCreateReq *models
 
 func (a *AccountsApi) getToUpdateAccount(uid int64, accountModifyReq *models.AccountModifyRequest, oldAccount *models.Account, isSubAccount bool) *models.Account {
 	newAccountExtend := &models.AccountExtend{}
+	newAccountExtend.LastReconciledTime = accountModifyReq.LastReconciledTime
 
 	if !isSubAccount && accountModifyReq.Category == models.ACCOUNT_CATEGORY_CREDIT_CARD {
 		newAccountExtend.CreditCardStatementDate = &accountModifyReq.CreditCardStatementDate
@@ -793,14 +794,17 @@ func (a *AccountsApi) getToUpdateAccount(uid int64, accountModifyReq *models.Acc
 		return newAccount
 	}
 
-	if (newAccount.Extend != nil && oldAccount.Extend == nil) ||
-		(newAccount.Extend == nil && oldAccount.Extend != nil) {
+	oldAccountExtend := oldAccount.Extend
+
+	if (newAccountExtend.LastReconciledTime != nil && (oldAccountExtend == nil || oldAccountExtend.LastReconciledTime == nil)) ||
+		(newAccountExtend.LastReconciledTime == nil && oldAccountExtend != nil && oldAccountExtend.LastReconciledTime != nil) ||
+		(newAccountExtend.LastReconciledTime != nil && oldAccountExtend != nil && oldAccountExtend.LastReconciledTime != nil && *newAccountExtend.LastReconciledTime != *oldAccountExtend.LastReconciledTime) {
 		return newAccount
 	}
 
-	oldAccountExtend := oldAccount.Extend
-
-	if newAccountExtend.CreditCardStatementDate != oldAccountExtend.CreditCardStatementDate {
+	if (newAccountExtend.CreditCardStatementDate != nil && (oldAccountExtend == nil || oldAccountExtend.CreditCardStatementDate == nil)) ||
+		(newAccountExtend.CreditCardStatementDate == nil && oldAccountExtend != nil && oldAccountExtend.CreditCardStatementDate != nil) ||
+		(newAccountExtend.CreditCardStatementDate != nil && oldAccountExtend != nil && oldAccountExtend.CreditCardStatementDate != nil && *newAccountExtend.CreditCardStatementDate != *oldAccountExtend.CreditCardStatementDate) {
 		return newAccount
 	}
 

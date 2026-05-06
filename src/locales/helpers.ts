@@ -2564,7 +2564,7 @@ export function useI18n() {
         getAllStatisticsSortingTypes: (useAlternativeName?: boolean) => getLocalizedDisplayNameAndType(ChartSortingType.values(), useAlternativeName),
         getAllStatisticsDateAggregationTypes: (analysisType: StatisticsAnalysisType, includeBillingCycle: boolean) => getLocalizedChartDateAggregationTypeAndDisplayName(analysisType, true, includeBillingCycle),
         getAllStatisticsDateAggregationTypesWithShortName: (analysisType: StatisticsAnalysisType, includeBillingCycle: boolean) => getLocalizedChartDateAggregationTypeAndDisplayName(analysisType, false, includeBillingCycle),
-        getAllTransactionEditScopeTypes: () => getLocalizedDisplayNameAndType(TransactionEditScopeType.values()),
+        getAllTransactionEditScopeTypes: (useLastReconciledTime: boolean) => getLocalizedDisplayNameAndType(TransactionEditScopeType.values(useLastReconciledTime)),
         getAllTransactionQuickSaveButtonStyles: () => getLocalizedDisplayNameAndType(TransactionQuickSaveButtonStyle.values()),
         getAllTransactionQuickAddButtonActionTypes: () => getLocalizedDisplayNameAndType(TransactionQuickAddButtonActionType.values()),
         getAllTransactionScheduledFrequencyTypes: () => getLocalizedDisplayNameAndType(ScheduledTemplateFrequencyType.values()),
@@ -2579,6 +2579,7 @@ export function useI18n() {
         getAllTransactionExplorerChartTypes: (operators?: TransactionExplorerChartType[]) => getLocalizedNameValue(operators ?? TransactionExplorerChartType.values()),
         // get localized info
         getLanguageInfo,
+        getEnableDisableOption: (value: boolean) => t(value ? 'Enabled' : 'Disabled'),
         getMonthShortName,
         getMonthLongName,
         getMonthdayOrdinal,
